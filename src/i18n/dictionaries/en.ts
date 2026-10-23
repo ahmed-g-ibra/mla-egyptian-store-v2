@@ -78,6 +78,8 @@ export const en = {
     item: 'Item',
     quantity: 'Qty',
     price: 'Price',
+    removed: 'Removed',
+    undo: 'Undo',
     remove: 'Remove',
     subtotal: 'Subtotal',
     shippingNote: 'Shipping is quoted per order by weight, and confirmed before you pay.',
