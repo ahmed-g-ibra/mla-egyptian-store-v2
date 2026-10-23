@@ -120,6 +120,9 @@ export const en = {
     shippingFree: 'Free across the GCC',
     shippingQuoted: 'Confirmed before you pay',
     total: 'Total',
+    photosNote: 'WhatsApp cannot carry photographs in a prefilled message, so the order link above opens a page showing every piece.',
+    viewOrder: 'View this order with photos',
+    contactTitle: 'Reach us about this order',
     nextTitle: 'What happens next',
     next1: 'We reply on WhatsApp, usually the same day.',
     next2: 'We confirm stock, the final price and the delivery date.',
@@ -159,6 +162,19 @@ export const en = {
     commonTitle: 'A rough sense of scale',
     commonBody:
       'Most of the collection sits between a coffee cup and an A4 sheet. The scale drawing on each product page compares that piece against a sheet of A4 stood on its long edge.',
+  },
+  order: {
+    title: 'Your order',
+    lead: 'Everything you sent us, with the pieces shown. Keep this link — it is the whole order.',
+    placedOn: 'Placed on',
+    pieces: 'Pieces',
+    contactTitle: 'Talk to us about this order',
+    contactLead: 'Quote the reference and we will find it straight away.',
+    whatsappAbout: 'Hello MLA, about order',
+    invalidTitle: 'We could not read that order',
+    invalidBody:
+      'The link looks incomplete. Open the one we sent you on WhatsApp, or message us with your reference and we will pull it up.',
+    viewPiece: 'View this piece',
   },
   footer: {
     rights: 'All rights reserved.',

@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { useCart, useCurrency } from './providers';
 import { formatPrice, convert } from '@/lib/currency';
 import { createOrderReference } from '@/lib/order-reference';
+import { encodeOrder } from '@/lib/order-link';
 import { products } from '@/data/products';
-import { whatsappLink } from '@/config/store';
+import { store, whatsappLink } from '@/config/store';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/get-dictionary';
 import { GlyphLoader } from './glyphs';
@@ -53,10 +54,18 @@ export function CartView({ locale, dict }: { locale: Locale; dict: Dictionary })
   /** Already-converted amounts go through the same formatter as the prices. */
   const money = (amount: number) => formatPrice(amount, currency, locale, { convertFirst: false });
 
-  const buildMessage = () =>
-    [
+  const buildMessage = () => {
+    const reference = createOrderReference();
+    /* Country is unknown on this path, so shipping is settled in the chat. */
+    const url = `${store.siteUrl}/${locale}/order${encodeOrder({
+      reference,
+      lines: entries.map((entry) => ({ slug: entry.slug, quantity: entry.quantity })),
+      currency,
+      country: 'OM',
+    })}`;
+    return [
       dict.cart.whatsappIntro,
-      `${dict.checkout.reference}: ${createOrderReference()}`,
+      `${dict.checkout.reference}: ${reference}`,
       '',
       ...entries.map(
         (entry) =>
@@ -66,7 +75,10 @@ export function CartView({ locale, dict }: { locale: Locale; dict: Dictionary })
       ),
       '',
       `${dict.cart.subtotal}: ${money(subtotal)}`,
+      '',
+      url,
     ].join('\n');
+  };
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_20rem]">

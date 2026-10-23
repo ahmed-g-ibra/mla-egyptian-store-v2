@@ -6,8 +6,9 @@ import { useCart, useCurrency } from './providers';
 import { useCartLines } from './cart-view';
 import { convert, convertFromAed, formatPrice } from '@/lib/currency';
 import { createOrderReference } from '@/lib/order-reference';
+import { encodeOrder } from '@/lib/order-link';
 import { shipping as shippingRules } from '@/data/faq';
-import { whatsappLink } from '@/config/store';
+import { store, whatsappLink } from '@/config/store';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/get-dictionary';
 import { Glyph, GlyphLoader } from './glyphs';
@@ -54,6 +55,15 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
 
   const money = (amount: number) => formatPrice(amount, currency, locale, { convertFirst: false });
 
+  /** Absolute, because it is going into a message read on another device. */
+  const orderUrl = (reference: string, country: Country) =>
+    `${store.siteUrl}/${locale}/order${encodeOrder({
+      reference,
+      lines: entries.map((entry) => ({ slug: entry.slug, quantity: entry.quantity })),
+      currency,
+      country,
+    })}`;
+
   const buildMessage = (reference: string, country: Country) => {
     const ship = shippingAed(country);
     const shipLine = ship === 0 ? dict.checkout.shippingFree : money(convertFromAed(ship, currency));
@@ -71,6 +81,8 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
       `${dict.cart.subtotal}: ${money(subtotal)}`,
       `${dict.checkout.shipping}: ${shipLine}`,
       `${dict.checkout.total}: ${money(subtotal + convertFromAed(ship, currency))}`,
+      '',
+      orderUrl(reference, country),
     ].join('\n');
   };
 
@@ -123,7 +135,47 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
             </ol>
           </section>
 
-          <p className="mt-12 text-sm text-ink-500">{dict.checkout.reopenHint}</p>
+          <section className="mt-12">
+            <h3 className="font-display text-xl text-ink-900">{dict.checkout.contactTitle}</h3>
+            <span className="mt-2 block h-px w-20 bg-gold-500/60" />
+            <div className="mt-5 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
+              <a
+                href={`tel:${store.whatsappNumber}`}
+                className="text-ink-900 underline decoration-gold-500 underline-offset-4 transition-colors hover:text-gold-600"
+                dir="ltr"
+              >
+                {store.phoneDisplay}
+              </a>
+              <a
+                href={`mailto:${store.email}?subject=${encodeURIComponent(
+                  `${dict.checkout.reference}: ${placed.reference}`,
+                )}`}
+                className="break-all text-ink-900 underline decoration-gold-500 underline-offset-4 transition-colors hover:text-gold-600"
+              >
+                {store.email}
+              </a>
+              <span className="text-ink-500">
+                {store.city[locale]}, {store.country[locale]}
+              </span>
+            </div>
+          </section>
+
+          <p className="mt-12 max-w-xl text-sm leading-relaxed text-ink-500">
+            {dict.checkout.photosNote}
+          </p>
+          <Link
+            href={`/${locale}/order${encodeOrder({
+              reference: placed.reference,
+              lines: entries.map((entry) => ({ slug: entry.slug, quantity: entry.quantity })),
+              currency,
+              country: placed.country,
+            })}`}
+            className="mt-3 inline-flex min-h-11 items-center rounded-sm border border-lapis-700 px-5 py-3 font-display text-sm uppercase tracking-[0.12em] text-lapis-800 transition-colors hover:bg-lapis-800 hover:text-papyrus-50"
+          >
+            {dict.checkout.viewOrder}
+          </Link>
+
+          <p className="mt-10 text-sm text-ink-500">{dict.checkout.reopenHint}</p>
           <div className="mt-3 flex flex-wrap gap-3">
             <a
               href={whatsappLink(buildMessage(placed.reference, placed.country))}
