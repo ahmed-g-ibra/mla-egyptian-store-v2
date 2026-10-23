@@ -19,6 +19,12 @@ export type Product = {
   name: Localised;
   /** One line for cards and meta descriptions. */
   tagline: Localised;
+  /**
+   * What the piece is called in the home page headline, where the catalogue
+   * name is too long or too specific — "Bastet" rather than "Bastet, Seated".
+   * Falls back to `name`.
+   */
+  heroName?: Localised;
   description: Localised;
   /** As listed by the supplier, before MLA's markup. Never shown directly. */
   priceUsd: number;

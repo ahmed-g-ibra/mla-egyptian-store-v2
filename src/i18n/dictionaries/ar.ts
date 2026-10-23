@@ -16,7 +16,11 @@ export const ar: Dictionary = {
   },
   hero: {
     eyebrow: 'صناعة يدوية في مصر',
-    title: 'باستت وأنوبيس ونفرتيتي — صُنعت في القاهرة وتصل إلى بابك',
+    // Deliberately not a translation of the English: 'made in Cairo' needs a
+    // verb that agrees with the piece's gender, and أنوبيس and باستت disagree.
+    // 'from Cairo's workshops to your door' carries the same promise with no
+    // agreement to get wrong.
+    title: '{name} — من ورش القاهرة إلى بابك',
     body: 'قطع مصرية مشغولة يدويًا تبدأ من {from}. اطلب عبر واتساب، إلى أي مكان في الخليج خلال 15 يومًا.',
     featuredLabel: 'الأكثر طلبًا',
     orderNow: 'اطلب عبر واتساب',

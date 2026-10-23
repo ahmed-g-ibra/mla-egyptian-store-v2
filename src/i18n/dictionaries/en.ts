@@ -14,7 +14,8 @@ export const en = {
   },
   hero: {
     eyebrow: 'Handmade in Egypt',
-    title: 'Bastet, Anubis and Nefertiti — made in Cairo, delivered to your door',
+    /** {name} is the piece currently shown, so the headline and the photo agree. */
+    title: '{name} — made in Cairo, delivered to your door',
     /** {from} is replaced with the cheapest piece in the visitor's currency. */
     body: 'Hand-finished Egyptian pieces from {from}. Order on WhatsApp, anywhere in the Gulf within 15 days.',
     featuredLabel: 'Most asked for',

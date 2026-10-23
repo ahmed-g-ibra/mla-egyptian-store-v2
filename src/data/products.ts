@@ -23,6 +23,7 @@ export const products: Product[] = [
       en: 'A lidded scarab box carrying the boy king’s cartouche.',
       ar: 'علبة على هيئة جُعران تحمل خرطوش الملك الصغير.',
     },
+    heroName: { en: 'Tutankhamun', ar: 'توت عنخ آمون' },
     description: {
       en: 'The scarab was the Egyptian sign for becoming — the beetle rolling the sun up out of the horizon each morning. This one opens. Lift the shell and the hollow beneath held rings, oils or a folded note, which is roughly what the originals were for. The lid carries Tutankhamun’s cartouche in relief.',
       ar: 'كان الجُعران علامة التحوّل عند المصريين — الخنفساء التي تدحرج الشمس من الأفق كل صباح. وهذه تُفتح. ارفع الغطاء فتجد تجويفًا كان مثله يحفظ الخواتم أو الزيوت أو ورقة مطوية، وهو تقريبًا ما صُنعت له الأصول. ويحمل الغطاء خرطوش توت عنخ آمون بارزًا.',
@@ -40,6 +41,7 @@ export const products: Product[] = [
       en: 'The household goddess, upright and listening.',
       ar: 'ربّة البيت، منتصبة ومُصغية.',
     },
+    heroName: { en: 'Bastet', ar: 'باستت' },
     description: {
       en: 'Bastet guarded the home, and the Egyptians drew her as a cat because a cat does the same job without being asked. She sits upright here, ears forward, tail curled to the front paws — the Saqqara posture, the one the bronze originals hold. Available in several finishes and sizes.',
       ar: 'كانت باستت تحرس البيت، ورسمها المصريون قطةً لأن القطة تؤدّي العمل نفسه دون أن يُطلب منها. تجلس هنا منتصبة، أذناها إلى الأمام وذيلها ملفوف عند القائمتين الأماميتين — وهي وقفة سقارة التي تتخذها البرونزيات الأصلية. متاحة بتشطيبات وأحجام عدّة.',
@@ -47,13 +49,21 @@ export const products: Product[] = [
     priceUsd: 26.5,
     compareAtUsd: null,
     featured: true,
-    images: ['1', '2', '3', '4', '5'].map((n) => `/products/bastet-cat-statue/${n}.webp`),
+    /*
+     * Not in file order. The supplier's first three shots have 13", 8" and
+     * 5.5" burned into them — their measurements, on a shop that says most
+     * pieces are not measured yet, and the first thing a visitor saw in the
+     * hero. The clean shot leads; the sizing ones stay in the gallery, where
+     * they are genuinely useful.
+     */
+    images: ['4', '1', '2', '3', '5'].map((n) => `/products/bastet-cat-statue/${n}.webp`),
   },
   {
     slug: 'isis-winged-statue',
     collection: 'gods',
     name: { en: 'Isis, Winged', ar: 'إيزيس ذات الجناحين' },
     tagline: { en: 'Arms open, wings spread in protection.', ar: 'ذراعان مفتوحتان وجناحان منشوران للحماية.' },
+    heroName: { en: 'Isis', ar: 'إيزيس' },
     description: {
       en: 'Isis put her husband back together and shielded her son, and Egyptian art gave her wings to say so. The arms open outward and the feathers fall from them in carved rows — the gesture painted across the corners of sarcophagi, where she stood guard at each one.',
       ar: 'جمعت إيزيس أشلاء زوجها وحَمَت ابنها، فمنحها الفن المصري جناحين ليقول ذلك. تنفتح الذراعان إلى الخارج ويتدلّى منهما الريش في صفوف محفورة — وهي الإشارة نفسها المرسومة على أركان التوابيت حيث كانت تقف حارسة عند كل ركن.',
@@ -222,6 +232,7 @@ export const products: Product[] = [
     collection: 'gods',
     name: { en: 'Anubis, Standing', ar: 'أنوبيس واقفًا' },
     tagline: { en: 'The jackal who weighed the heart.', ar: 'ابن آوى الذي يزن القلب.' },
+    heroName: { en: 'Anubis', ar: 'أنوبيس' },
     description: {
       en: 'Anubis ran the scales. The heart went on one pan, the feather of Maat on the other, and he read the balance — the single most consequential measurement in Egyptian thought. He is shown upright here in the striding pose, jackal head turned in profile.',
       ar: 'كان أنوبيس صاحب الميزان. يوضع القلب في كفّة وريشة ماعت في الأخرى، فيقرأ هو الميزان — وهو أخطر قياس في الفكر المصري كله. وهو هنا منتصب في وضعية الخَطو، ورأس ابن آوى ملتفت جانبيًا.',
@@ -432,6 +443,7 @@ export const products: Product[] = [
     collection: 'pharaohs',
     name: { en: 'Nefertiti Bust', ar: 'تمثال نفرتيتي النصفي' },
     tagline: { en: 'The Berlin bust, long neck and flat-topped crown.', ar: 'تمثال برلين بعنقه الطويل وتاجه المسطَّح.' },
+    heroName: { en: 'Nefertiti', ar: 'نفرتيتي' },
     description: {
       en: 'Found in a sculptor’s workshop at Amarna in 1912, unfinished — the left eye was never inlaid and still is not. It was a model kept for other artists to copy, which makes every reproduction since a continuation of what it was for.',
       ar: 'عُثر عليه في ورشة نحّات بتل العمارنة سنة 1912 غير مكتمل — فالعين اليسرى لم تُطعَّم قطّ ولا تزال. كان نموذجًا يُحتفظ به ليَنسخ عنه الفنانون الآخرون، وهو ما يجعل كل نسخة بعده امتدادًا لما صُنع من أجله.',

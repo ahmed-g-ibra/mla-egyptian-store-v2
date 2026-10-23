@@ -16,15 +16,27 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   const featured = products.filter((p) => p.featured).slice(0, 8);
   /**
-   * The hero cycles through five bestsellers. Bastet leads because she is
-   * mid-priced and instantly recognisable — opening on the AED 764 sculpture
-   * would price the shop out of a gift-buyer's head before they scrolled —
-   * and the rest follow in an order shuffled per visit.
+   * The hero cycles five pieces and the headline names whichever is showing,
+   * so the words and the photograph always agree.
+   *
+   * They are chosen for distinct, instantly recognisable subjects rather than
+   * by rank: the previous set drew Isis twice and included "Canopic Jars, Set
+   * of Four — Verdigris", which makes an unusable headline. All five sit in
+   * the gift band, and Bastet leads because the server renders index 0 and
+   * opening on the AED 764 sculpture would price the shop out of a
+   * gift-buyer's head before they scrolled.
    */
-  const heroPieces = [
-    products.find((p) => p.slug === 'bastet-cat-statue'),
-    ...featured.filter((p) => p.slug !== 'bastet-cat-statue'),
-  ].filter((p): p is NonNullable<typeof p> => Boolean(p)).slice(0, 5);
+  const heroSlugs = [
+    'bastet-cat-statue',
+    'anubis-standing-statue',
+    'nefertiti-bust',
+    'tutankhamun-scarab-box',
+    'isis-winged-statue',
+  ];
+  const heroPieces = heroSlugs
+    .map((slug) => products.find((product) => product.slug === slug))
+    .filter((product): product is NonNullable<typeof product> => Boolean(product));
+
   const cheapestUsd = Math.min(...products.map((p) => p.priceUsd));
 
   return (

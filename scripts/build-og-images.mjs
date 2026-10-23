@@ -9,7 +9,7 @@
  * Re-runnable and idempotent: run it after changing the catalogue or the logo.
  *   node scripts/build-og-images.mjs
  */
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -23,9 +23,18 @@ const INK = '#14110c';
 const PLATE = '#ffffff';   // the supplier photographs are shot on white
 const BORDER = '#d8c9a9'; // papyrus-300, the site's own card border
 
-/** Slugs in catalogue order, read from the generated product data. */
-const slugs = [...(await readFile(join(root, 'src/data/products.ts'), 'utf8'))
-  .matchAll(/^\s{4}slug: '([^']+)',$/gm)].map((m) => m[1]);
+/**
+ * Slug plus its leading photograph, read from the product data rather than
+ * the filesystem: the declared order is not always file order, because the
+ * first shot on disk is sometimes the supplier's sizing image.
+ */
+const productSource = await readFile(join(root, 'src/data/products.ts'), 'utf8');
+const products = [...productSource.matchAll(
+  /slug: '([^']+)',[\s\S]*?images: \[([^\]]+)\]/g,
+)].map(([, slug, list]) => ({
+  slug,
+  first: `${list.match(/'([^']+)'/)[1]}.webp`,
+}));
 
 const goldMark = await readFile(join(root, 'brand/mla-logo-gold.svg'));
 const inkMark = await readFile(join(root, 'brand/mla-logo-ink.svg'));
@@ -67,9 +76,8 @@ await mkdir(join(OUT, 'products'), { recursive: true });
   const { width: mw, height: mh } = await sharp(mark).metadata();
   let built = 0;
 
-  for (const slug of slugs) {
+  for (const { slug, first } of products) {
     const dir = join(root, 'public/products', slug);
-    const first = (await readdir(dir)).sort()[0];
 
     // `contain`, not `cover`: a statue cropped by a share card looks broken.
     const SIZE = H - 90;

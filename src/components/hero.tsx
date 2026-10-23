@@ -53,6 +53,14 @@ export function Hero({
   const { currency } = useCurrency();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  /**
+   * The headline only fades once the hero has actually changed piece. The
+   * fade starts at opacity 0, and the headline is the largest text on the
+   * page — animating it on first paint made it the LCP element and pushed
+   * LCP from 2.1s to 4.8s, 90% of it render delay, for a flourish nobody
+   * sees on arrival.
+   */
+  const [rotated, setRotated] = useState(false);
   const reduced = usePrefersReducedMotion();
   const orderRef = useRef<number[]>([]);
 
@@ -72,6 +80,7 @@ export function Hero({
   useEffect(() => {
     if (paused || reduced || products.length < 2) return;
     const timer = window.setInterval(() => {
+      setRotated(true);
       setIndex((current) => {
         const order = orderRef.current;
         const at = order.indexOf(current);
@@ -100,8 +109,16 @@ export function Hero({
         <p className="font-display text-[11px] uppercase tracking-[0.3em] text-gold-300 sm:text-xs">
           {dict.hero.eyebrow}
         </p>
-        <h1 className="mt-3 font-display text-[1.75rem] leading-[1.15] text-papyrus-50 sm:text-4xl lg:text-5xl">
-          {dict.hero.title}
+        {/*
+          min-height reserves what the longest name needs so swapping the
+          headline never nudges the page. Measured at each breakpoint with
+          every name in the rotation, not guessed: the tallest is 6.04rem at
+          375px, 10.35rem at 768 and 13.8rem at 1024.
+        */}
+        <h1 className="mt-3 min-h-[6.3rem] font-display text-[1.75rem] leading-[1.15] text-papyrus-50 sm:min-h-[10.5rem] sm:text-4xl lg:min-h-[14rem] lg:text-5xl">
+          <span key={active.slug} className={rotated ? 'animate-hero-name' : undefined}>
+            {dict.hero.title.replace('{name}', (active.heroName ?? active.name)[locale])}
+          </span>
         </h1>
 
         <p className="mt-4 max-w-md text-base leading-relaxed text-papyrus-300 sm:text-lg">
@@ -182,7 +199,10 @@ export function Hero({
               <button
                 key={product.slug}
                 type="button"
-                onClick={() => setIndex(i)}
+                onClick={() => {
+                  setRotated(true);
+                  setIndex(i);
+                }}
                 aria-label={product.name[locale]}
                 aria-current={i === index}
                 className="group grid h-7 w-7 place-items-center rounded-full"
