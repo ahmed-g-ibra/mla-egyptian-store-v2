@@ -54,8 +54,10 @@ export default function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Anything with a file extension is an asset, not a page: without the
-    // final clause /icon.png gets redirected to /en/icon.png and 404s.
-    '/((?!api|_next/static|_next/image|products|sitemap.xml|robots.txt|[^/]+\\.[^/]+$).*)',
+    // Any path whose last segment has a dot is an asset, not a page. The dot
+    // has to be matched at any depth: an earlier version only caught files at
+    // the root, so /icon.png was fine but /og/share.jpg was still redirected
+    // to /en/og/share.jpg and 404ed.
+    '/((?!api|_next/static|_next/image|products|sitemap.xml|robots.txt|.*\\.[^/]*$).*)',
   ],
 };
