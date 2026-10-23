@@ -53,5 +53,9 @@ export default function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|products|favicon.ico|sitemap.xml|robots.txt).*)'],
+  matcher: [
+    // Anything with a file extension is an asset, not a page: without the
+    // final clause /icon.png gets redirected to /en/icon.png and 404s.
+    '/((?!api|_next/static|_next/image|products|sitemap.xml|robots.txt|[^/]+\\.[^/]+$).*)',
+  ],
 };

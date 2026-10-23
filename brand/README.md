@@ -48,6 +48,14 @@ a ratio change of 2.818 to 2.864.
 | Lapis | `#16365f` |
 | Papyrus ground | `#f5eedf` |
 
+## The app icon
+
+`src/app/icon.png` and `apple-icon.png` are the M of MLA alone, gold on ink,
+in the same Cinzel Bold and the cartouche's corner radius. The full lockup
+cannot survive a 16px browser tab — the hieroglyphs turn to mush — so the
+icon uses the letter instead of shrinking the mark. They replaced the default
+Next.js logo, which had been shipping on the live site.
+
 ## Rules
 
 - **Do not use it below about 40px tall.** The hieroglyphs stop resolving and

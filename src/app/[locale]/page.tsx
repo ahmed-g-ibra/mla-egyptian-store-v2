@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { isLocale, type Locale } from '@/i18n/config';
@@ -7,7 +6,7 @@ import { products } from '@/data/products';
 import { collections } from '@/data/collections';
 import { ProductCard } from '@/components/product-card';
 import { Glyph, GlyphFrieze } from '@/components/glyphs';
-import { HeroFeature } from '@/components/hero-feature';
+import { Hero } from '@/components/hero';
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -17,45 +16,26 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   const featured = products.filter((p) => p.featured).slice(0, 8);
   /**
-   * The hero piece is mid-priced and instantly recognisable, not the most
-   * expensive one. A AED 764 sculpture as the first thing a gift-buyer sees
-   * prices the shop out of their head before they have scrolled.
+   * The hero cycles through five bestsellers. Bastet leads because she is
+   * mid-priced and instantly recognisable — opening on the AED 764 sculpture
+   * would price the shop out of a gift-buyer's head before they scrolled —
+   * and the rest follow in an order shuffled per visit.
    */
-  const hero = products.find((p) => p.slug === 'bastet-cat-statue') ?? products[0];
+  const heroPieces = [
+    products.find((p) => p.slug === 'bastet-cat-statue'),
+    ...featured.filter((p) => p.slug !== 'bastet-cat-statue'),
+  ].filter((p): p is NonNullable<typeof p> => Boolean(p)).slice(0, 5);
   const cheapestUsd = Math.min(...products.map((p) => p.priceUsd));
 
   return (
     <>
       <section className="relative overflow-hidden border-b border-papyrus-300/70 bg-ink-900 text-papyrus-100">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 sm:px-6 sm:py-16 md:grid-cols-2">
-          <div>
-            <p className="font-display text-[11px] uppercase tracking-[0.3em] text-gold-300 sm:text-xs">
-              {dict.hero.eyebrow}
-            </p>
-            <h1 className="mt-3 font-display text-[1.75rem] leading-[1.15] text-papyrus-50 sm:text-4xl lg:text-5xl">
-              {dict.hero.title}
-            </h1>
-
-            <HeroFeature
-              product={hero}
-              cheapestUsd={cheapestUsd}
-              locale={typed}
-              dict={dict}
-            />
-          </div>
-
-          {/* Decorative on mobile, where the compact feature card does the work. */}
-          <div className="relative mx-auto hidden aspect-square w-full max-w-sm overflow-hidden rounded-sm border border-gold-400/30 bg-papyrus-50 shadow-2xl md:block">
-            <Image
-              src={hero.images[0]}
-              alt={hero.name[typed]}
-              fill
-              sizes="(min-width: 768px) 24rem, 0px"
-              priority
-              className="object-cover"
-            />
-          </div>
-        </div>
+        <Hero
+          products={heroPieces}
+          cheapestUsd={cheapestUsd}
+          locale={typed}
+          dict={dict}
+        />
 
         <p className="border-t border-papyrus-400/15 px-4 py-3 text-center text-xs tracking-wide text-papyrus-400">
           {dict.home.shippingStrip}

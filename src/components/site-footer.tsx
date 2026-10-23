@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/get-dictionary';
 import { store, whatsappLink } from '@/config/store';
-import { GlyphFrieze } from './glyphs';
+import { Cartouche, GlyphFrieze } from './glyphs';
 
 export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const browse = [
@@ -21,9 +21,11 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
       <GlyphFrieze className="pt-10" />
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
-          <p className="font-display text-2xl tracking-[0.3em] text-gold-300">
-            {dict.brand.wordmark}
-          </p>
+          <Cartouche
+            label={dict.brand.wordmark}
+            className="h-14 w-auto text-gold-300"
+            titleId="footer-cartouche"
+          />
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-papyrus-300">
             {dict.brand.tagline}
           </p>
