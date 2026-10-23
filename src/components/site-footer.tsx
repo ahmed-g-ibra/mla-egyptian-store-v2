@@ -39,7 +39,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
           <ul className="mt-4 space-y-2 text-sm">
             {browse.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="inline-flex min-h-7 items-center text-papyrus-300 transition-colors hover:text-gold-300">
+                <Link href={link.href} className="text-papyrus-300 transition-colors hover:text-gold-300">
                   {link.label}
                 </Link>
               </li>
@@ -54,7 +54,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
           <ul className="mt-4 space-y-2 text-sm">
             {help.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="inline-flex min-h-7 items-center text-papyrus-300 transition-colors hover:text-gold-300">
+                <Link href={link.href} className="text-papyrus-300 transition-colors hover:text-gold-300">
                   {link.label}
                 </Link>
               </li>
@@ -62,7 +62,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             <li>
               <a
                 href={whatsappLink(dict.contact.whatsappIntro)}
-                className="inline-flex min-h-7 items-center text-papyrus-300 transition-colors hover:text-gold-300"
+                className="text-papyrus-300 transition-colors hover:text-gold-300"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -72,7 +72,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             <li>
               <a
                 href={`mailto:${store.email}`}
-                className="inline-flex min-h-7 items-center break-all text-papyrus-300 transition-colors hover:text-gold-300"
+                className="break-all text-papyrus-300 transition-colors hover:text-gold-300"
               >
                 {store.email}
               </a>

@@ -22,14 +22,8 @@
   --color-lapis-600: #1b4274;
   --color-lapis-200: #b7cae4;
 
-  /*
-   * Gold. 600 is the only one safe for small text on sand: at #8a6d14 it
-   * measured 4.25:1 on papyrus-100, under the 4.5:1 WCAG AA floor Apple's
-   * accessibility.md cites for text up to 17 pt. Darkened at constant hue
-   * (45deg) and saturation to 5.03:1, with headroom rather than a pass by
-   * hundredths.
-   */
-  --color-gold-600: #7c6212;
+  /* Gold. 600 is the darkest and the only one safe for small text on sand. */
+  --color-gold-600: #8a6d14;
   --color-gold-500: #b08f22;
   --color-gold-400: #d0ae3f;
   --color-gold-300: #e0c877;

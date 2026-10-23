@@ -40,8 +40,6 @@ type CartContextValue = {
   add: (slug: string) => void;
   setQuantity: (slug: string, quantity: number) => void;
   remove: (slug: string) => void;
-  /** Puts a line back at the quantity it had, for undo. */
-  restore: (slug: string, quantity: number) => void;
   clear: () => void;
   count: number;
   /** False until the browser's stored cart has been read, so SSR and the first
@@ -140,14 +138,6 @@ export function Providers({
     [],
   );
 
-  const restore = useCallback((slug: string, quantity: number) => {
-    setLines((current) =>
-      current.some((l) => l.slug === slug)
-        ? current.map((l) => (l.slug === slug ? { ...l, quantity } : l))
-        : [...current, { slug, quantity }],
-    );
-  }, []);
-
   const clear = useCallback(() => setLines([]), []);
 
   const cartValue = useMemo<CartContextValue>(
@@ -156,12 +146,11 @@ export function Providers({
       add,
       setQuantity,
       remove,
-      restore,
       clear,
       count: lines.reduce((sum, l) => sum + l.quantity, 0),
       ready,
     }),
-    [lines, add, setQuantity, remove, restore, clear, ready],
+    [lines, add, setQuantity, remove, clear, ready],
   );
 
   const currencyValue = useMemo(() => ({ currency, setCurrency }), [currency, setCurrency]);

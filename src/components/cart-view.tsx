@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 import { useCart, useCurrency } from './providers';
 import { formatPrice, convert, currencyMeta } from '@/lib/currency';
 import { products } from '@/data/products';
@@ -25,47 +24,15 @@ export function useCartLines(locale: Locale) {
 }
 
 export function CartView({ locale, dict }: { locale: Locale; dict: Dictionary }) {
-  const { setQuantity, remove, restore, ready } = useCart();
-  /**
-   * Removing a line is destructive and was reachable from a 38x16 target.
-   * Apple's guidance is that irreversible actions warrant a warning but that
-   * undo covers the rest — a confirmation dialog on every cart row would be
-   * worse than the problem. The row goes immediately and comes back on one tap.
-   */
-  const [undoable, setUndoable] = useState<{ slug: string; name: string; quantity: number } | null>(
-    null,
-  );
+  const { setQuantity, remove, ready } = useCart();
   const { currency } = useCurrency();
   const entries = useCartLines(locale);
 
   if (!ready) return <GlyphLoader label={dict.common.loading} />;
 
-  const undoBar = undoable ? (
-    <div
-      role="status"
-      className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-sm border border-papyrus-300/70 bg-papyrus-50 px-4 py-3 text-sm"
-    >
-      <span className="text-ink-700">
-        {dict.cart.removed} — {undoable.name}
-      </span>
-      <button
-        type="button"
-        onClick={() => {
-          restore(undoable.slug, undoable.quantity);
-          setUndoable(null);
-        }}
-        className="inline-flex min-h-8 items-center rounded-sm px-3 font-medium text-gold-600 underline underline-offset-4"
-      >
-        {dict.cart.undo}
-      </button>
-    </div>
-  ) : null;
-
   if (entries.length === 0) {
     return (
-      <div>
-        {undoBar}
-        <div className="py-20 text-center">
+      <div className="py-20 text-center">
         <p className="text-lg text-ink-700">{dict.cart.empty}</p>
         <Link
           href={`/${locale}/shop`}
@@ -73,7 +40,6 @@ export function CartView({ locale, dict }: { locale: Locale; dict: Dictionary })
         >
           {dict.cart.emptyCta}
         </Link>
-        </div>
       </div>
     );
   }
@@ -94,11 +60,8 @@ export function CartView({ locale, dict }: { locale: Locale; dict: Dictionary })
     )}`,
   ].join('\n');
 
-
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_20rem]">
-      <div>
-        {undoBar}
       <ul className="divide-y divide-papyrus-300/70 border-y border-papyrus-300/70">
         {entries.map((entry) => (
           <li key={entry.slug} className="flex gap-4 py-5">
@@ -137,20 +100,13 @@ export function CartView({ locale, dict }: { locale: Locale; dict: Dictionary })
                     onChange={(event) =>
                       setQuantity(entry.slug, Math.max(1, Number(event.target.value) || 1))
                     }
-                    className="min-h-8 w-16 rounded-sm border border-papyrus-300 bg-transparent px-2 py-1.5 text-center text-ink-900 tabular-nums"
+                    className="w-16 rounded-sm border border-papyrus-300 bg-transparent px-2 py-1 text-center text-ink-900 tabular-nums"
                   />
                 </label>
                 <button
                   type="button"
-                  onClick={() => {
-                    setUndoable({
-                      slug: entry.slug,
-                      name: entry.name,
-                      quantity: entry.quantity,
-                    });
-                    remove(entry.slug);
-                  }}
-                  className="inline-flex min-h-8 items-center rounded-sm px-2 text-xs text-ink-500 underline underline-offset-4 transition-colors hover:text-carnelian-600"
+                  onClick={() => remove(entry.slug)}
+                  className="text-xs text-ink-500 underline underline-offset-4 transition-colors hover:text-carnelian-600"
                 >
                   {dict.cart.remove}
                 </button>
@@ -159,7 +115,6 @@ export function CartView({ locale, dict }: { locale: Locale; dict: Dictionary })
           </li>
         ))}
       </ul>
-      </div>
 
       <aside className="h-fit rounded-sm border border-papyrus-300/70 bg-papyrus-50 p-6">
         <h2 className="font-display text-lg text-ink-900">{dict.cart.subtotal}</h2>

@@ -20,7 +20,7 @@ export function CurrencySwitch({ locale, dict }: { locale: Locale; dict: Diction
           const next = event.target.value;
           if (isCurrency(next)) setCurrency(next as Currency);
         }}
-        className="min-h-7 cursor-pointer rounded-sm border border-papyrus-300 bg-transparent px-2 py-1.5 font-body text-ink-800 transition-colors hover:border-gold-500 focus-visible:border-gold-500"
+        className="cursor-pointer rounded-sm border border-papyrus-300 bg-transparent px-2 py-1 font-body text-ink-800 transition-colors hover:border-gold-500 focus-visible:border-gold-500"
       >
         {currencies.map((code) => (
           <option key={code} value={code}>
@@ -50,7 +50,7 @@ export function LocaleSwitch({ locale, dict }: { locale: Locale; dict: Dictionar
       type="button"
       onClick={swap}
       lang={other}
-      className="inline-flex min-h-7 items-center rounded-sm px-2 py-1.5 text-xs font-medium text-ink-800 underline-offset-4 transition-colors hover:text-gold-600 hover:underline"
+      className="rounded-sm px-2 py-1 text-xs font-medium text-ink-800 underline-offset-4 transition-colors hover:text-gold-600 hover:underline"
       aria-label={`${dict.common.language}: ${other === 'ar' ? dict.common.arabic : dict.common.english}`}
     >
       {other === 'ar' ? dict.common.arabic : dict.common.english}

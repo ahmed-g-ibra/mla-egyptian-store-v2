@@ -80,8 +80,6 @@ export const ar: Dictionary = {
     item: 'القطعة',
     quantity: 'الكمية',
     price: 'السعر',
-    removed: 'أُزيلت',
-    undo: 'تراجع',
     remove: 'إزالة',
     subtotal: 'المجموع',
     shippingNote: 'يُحدَّد الشحن لكل طلب حسب الوزن، ويُؤكَّد قبل الدفع.',
