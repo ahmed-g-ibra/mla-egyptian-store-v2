@@ -22,5 +22,19 @@ export const store = {
   siteUrl: 'https://mla-egyptian-store-v2.vercel.app',
 } as const;
 
+/**
+ * Builds a click-to-chat link.
+ *
+ * Deliberately api.whatsapp.com and not the shorter wa.me. On the owner's own
+ * network wa.me resolves and the TCP connection opens, then the TLS handshake
+ * is reset by peer — the signature of SNI-level domain blocking, and a common
+ * one because wa.me is a generic Meta shortener that filters treat as spam.
+ * api.whatsapp.com returned 200 for the same number at the same moment.
+ *
+ * Both are official endpoints and behave identically, deep-linking into the
+ * app on mobile. There is no case where wa.me is the better choice, and
+ * WhatsApp is the only way to actually place an order here, so a blocked link
+ * is a dead shop rather than a broken button.
+ */
 export const whatsappLink = (message: string) =>
-  `https://wa.me/${store.whatsappNumber}?text=${encodeURIComponent(message)}`;
+  `https://api.whatsapp.com/send?phone=${store.whatsappNumber}&text=${encodeURIComponent(message)}`;

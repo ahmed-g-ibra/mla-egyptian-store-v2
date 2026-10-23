@@ -275,6 +275,22 @@ before launch.
 
 ---
 
+## WhatsApp links
+
+Every order path builds its link through `whatsappLink()` in
+`src/config/store.ts`, which uses **api.whatsapp.com**, not the shorter wa.me.
+
+That is not a style preference. On the owner's own network wa.me resolves and
+the TCP connection opens, then the TLS handshake is reset by peer — the
+signature of SNI-level domain blocking, and a common one because wa.me is a
+generic Meta shortener that filters treat as spam. api.whatsapp.com returned
+200 for the same number at the same moment.
+
+Both are official click-to-chat endpoints and both deep-link into the app on
+mobile, so there is no case where wa.me is the better choice. Since WhatsApp
+is the only way to actually place an order here, a blocked link is a dead shop
+rather than a broken button. Do not "simplify" it back.
+
 ## Checkout
 
 The checkout page is a **demonstration**. It validates, shows a summary and
