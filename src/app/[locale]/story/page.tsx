@@ -30,6 +30,21 @@ export default async function StoryPage({ params }: { params: Promise<{ locale: 
     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
       <h1 className="font-display text-4xl text-ink-900">{dict.story.title}</h1>
       <p className="mt-4 text-lg leading-relaxed text-ink-700">{dict.story.lead}</p>
+
+      {/*
+       * This was the home page headline. It is better writing than selling, so
+       * it moved here, where a reader who already cares will give it the
+       * attention it asks for.
+       */}
+      <figure className="mt-10 border-s-2 border-gold-500 ps-6">
+        <blockquote className="font-display text-2xl leading-snug text-ink-900">
+          {dict.home.heroTitle}
+        </blockquote>
+        <figcaption className="mt-3 text-sm leading-relaxed text-ink-500">
+          {dict.home.heroBody}
+        </figcaption>
+      </figure>
+
       <GlyphFrieze className="my-10" />
       <div className="space-y-10">
         {storySections.map((section) => (

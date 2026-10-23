@@ -12,6 +12,15 @@ export const en = {
     close: 'Close',
     skipToContent: 'Skip to content',
   },
+  hero: {
+    eyebrow: 'Handmade in Egypt',
+    title: 'Bastet, Anubis and Nefertiti — made in Cairo, delivered to your door',
+    /** {from} is replaced with the cheapest piece in the visitor's currency. */
+    body: 'Hand-finished Egyptian pieces from {from}. Order on WhatsApp, anywhere in the Gulf within 15 days.',
+    featuredLabel: 'Most asked for',
+    orderNow: 'Order on WhatsApp',
+    browseAll: 'Browse all 30 pieces',
+  },
   home: {
     heroEyebrow: 'Handmade in Egypt',
     heroTitle: 'The gods, cast small enough to live with',

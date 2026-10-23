@@ -7,6 +7,7 @@ import { products } from '@/data/products';
 import { collections } from '@/data/collections';
 import { ProductCard } from '@/components/product-card';
 import { Glyph, GlyphFrieze } from '@/components/glyphs';
+import { HeroFeature } from '@/components/hero-feature';
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -15,44 +16,41 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const dict = getDictionary(typed);
 
   const featured = products.filter((p) => p.featured).slice(0, 8);
-  const hero = products.find((p) => p.slug === 'anubis-grand-sculpture') ?? products[0];
+  /**
+   * The hero piece is mid-priced and instantly recognisable, not the most
+   * expensive one. A AED 764 sculpture as the first thing a gift-buyer sees
+   * prices the shop out of their head before they have scrolled.
+   */
+  const hero = products.find((p) => p.slug === 'bastet-cat-statue') ?? products[0];
+  const cheapestUsd = Math.min(...products.map((p) => p.priceUsd));
 
   return (
     <>
       <section className="relative overflow-hidden border-b border-papyrus-300/70 bg-ink-900 text-papyrus-100">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 md:grid-cols-2 md:py-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 sm:px-6 sm:py-16 md:grid-cols-2">
           <div>
-            <p className="font-display text-xs uppercase tracking-[0.3em] text-gold-300">
-              {dict.home.heroEyebrow}
+            <p className="font-display text-[11px] uppercase tracking-[0.3em] text-gold-300 sm:text-xs">
+              {dict.hero.eyebrow}
             </p>
-            <h1 className="mt-5 font-display text-4xl leading-tight text-papyrus-50 sm:text-5xl">
-              {dict.home.heroTitle}
+            <h1 className="mt-3 font-display text-[1.75rem] leading-[1.15] text-papyrus-50 sm:text-4xl lg:text-5xl">
+              {dict.hero.title}
             </h1>
-            <p className="mt-5 max-w-md leading-relaxed text-papyrus-300">{dict.home.heroBody}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href={`/${typed}/shop`}
-                className="rounded-sm bg-gold-400 px-6 py-3.5 font-display text-sm uppercase tracking-[0.15em] text-ink-900 transition-colors hover:bg-gold-300"
-              >
-                {dict.home.heroCta}
-              </Link>
-              <Link
-                href={`/${typed}/story`}
-                className="rounded-sm border border-papyrus-400/50 px-6 py-3.5 font-display text-sm uppercase tracking-[0.15em] text-papyrus-200 transition-colors hover:border-gold-300 hover:text-gold-300"
-              >
-                {dict.home.heroCtaSecondary}
-              </Link>
-            </div>
+
+            <HeroFeature
+              product={hero}
+              cheapestUsd={cheapestUsd}
+              locale={typed}
+              dict={dict}
+            />
           </div>
 
-          {/* Framed deliberately: supplier photographs carry their own studio
-              backgrounds, so a plate reads better than a floating cut-out. */}
-          <div className="relative mx-auto aspect-square w-full max-w-sm overflow-hidden rounded-sm border border-gold-400/30 bg-papyrus-50 shadow-2xl">
+          {/* Decorative on mobile, where the compact feature card does the work. */}
+          <div className="relative mx-auto hidden aspect-square w-full max-w-sm overflow-hidden rounded-sm border border-gold-400/30 bg-papyrus-50 shadow-2xl md:block">
             <Image
               src={hero.images[0]}
               alt={hero.name[typed]}
               fill
-              sizes="(min-width: 768px) 24rem, 80vw"
+              sizes="(min-width: 768px) 24rem, 0px"
               priority
               className="object-cover"
             />
