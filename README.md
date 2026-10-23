@@ -33,6 +33,7 @@ npm run lint
 | `src/i18n/dictionaries/` | Every other string, `en.ts` and `ar.ts`. |
 | `scripts/source-products.json` | The raw scraped rows the catalogue was built from. |
 | `scripts/fetch-images.mjs` | Downloads and converts the product photos. |
+| `scripts/build-og-images.mjs` | Builds the share cards. Re-run after catalogue or logo changes. |
 
 ---
 
@@ -112,6 +113,23 @@ that, so they live apart and are merged at render time.
 
 A `/size-guide` page explains how each measurement is taken. Heights include
 the base, because that is what occupies a shelf.
+
+---
+
+## Share cards
+
+`node scripts/build-og-images.mjs` writes `public/og/share.jpg` for the site
+and one card per product under `public/og/products/`. Re-run it after adding a
+product or changing the logo.
+
+They are **JPEG**, while every image the site itself renders is WebP. That is
+deliberate: WhatsApp previews WebP unreliably, and a link sent on WhatsApp is
+how most people will meet this shop. A card that previews blank on the one
+channel that sells is worse than a slightly larger file.
+
+Each product card frames the photograph on a white plate with a hairline
+border, because the supplier shots are taken on white and would otherwise read
+as a sticker stuck onto the papyrus ground.
 
 ---
 

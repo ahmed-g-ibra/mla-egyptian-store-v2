@@ -35,9 +35,30 @@ export async function generateMetadata({
       languages: { en: `/en/products/${slug}`, ar: `/ar/products/${slug}` },
     },
     openGraph: {
+      type: 'website',
       title: product.name[locale],
       description: product.tagline[locale],
-      images: [{ url: product.images[0], width: 1200, height: 1200, alt: product.name[locale] }],
+      images: [
+        {
+          /*
+           * A JPEG card, not the WebP the page itself renders: WhatsApp
+           * previews WebP unreliably, and a product link sent on WhatsApp is
+           * the most common thing anyone will share here. Built by
+           * scripts/build-og-images.mjs.
+           */
+          url: `/og/products/${product.slug}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: product.name[locale],
+          type: 'image/jpeg',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.name[locale],
+      description: product.tagline[locale],
+      images: [`/og/products/${product.slug}.jpg`],
     },
   };
 }
