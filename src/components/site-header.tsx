@@ -45,7 +45,9 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
           className="shrink-0 text-ink-900 transition-colors hover:text-gold-600"
           aria-label={dict.brand.name}
         >
-          <Cartouche label={dict.brand.wordmark} className="h-9 w-auto" titleId="brand-cartouche" />
+          {/* 48px rather than 36: below this the hieroglyphs stop resolving and
+              read as a smudge rather than as signs. */}
+          <Cartouche label={dict.brand.wordmark} className="h-12 w-auto" titleId="brand-cartouche" />
         </Link>
 
         <nav aria-label={dict.nav.menu} className="ms-auto hidden lg:block">
