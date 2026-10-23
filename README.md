@@ -23,7 +23,7 @@ See *Honest description* before changing any product text.
 | **Add a product's measurements** | `src/data/specs.ts` | [Measurements](#measurements) |
 | **Change shipping rates** | `src/data/faq.ts` → `shipping` | [Shipping](#shipping) |
 | **Change any wording** | `src/i18n/dictionaries/en.ts` + `ar.ts` | [Translations](#translations) |
-| **Add a product** | `scripts/source-products.json`, then `products.ts` | [Products](#products) |
+| **Add a product** | `scripts/source-products.json` (local), then `products.ts` | [Products](#products) |
 | **Update exchange rates** | `src/lib/currency.ts` → `currencyMeta` | [Currency](#currency) |
 
 ---
@@ -130,6 +130,9 @@ the gallery.
 ### Adding a product
 
 1. Add a row to `scripts/source-products.json` with its slug and image URLs.
+   That file is **gitignored** — it records which supplier each photograph came
+   from, which is nobody else's business. Keep your copy; it is not in the
+   repository.
 2. `node scripts/fetch-images.mjs` — downloads, converts to WebP, skips what
    exists, and writes `scripts/failed-images.json` if anything 404s.
 3. Add the entry to `src/data/products.ts`.

@@ -6,7 +6,7 @@ export const store = {
   /** Digits only, full international format, no '+' and no spaces. */
   whatsappNumber: '96877170373',
   phoneDisplay: '+968 7717 0373',
-  email: 'REDACTED',
+  email: 'a7medgamal95@gmail.com',
   city: { en: 'Muscat', ar: 'مسقط' },
   country: { en: 'Oman', ar: 'عُمان' },
   /** ISO code of the country orders ship from. Drives the shipping copy. */

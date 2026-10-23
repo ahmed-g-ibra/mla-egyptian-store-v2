@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Catalogue source data: kept locally, not published.
+# It records which supplier each photograph came from.
+scripts/source-products.json
+scripts/failed-images.json
