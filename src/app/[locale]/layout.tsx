@@ -10,6 +10,8 @@ import { locales, isLocale, dir, htmlLang, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { defaultCurrency } from '@/lib/currency';
 import { store } from '@/config/store';
+import { products } from '@/data/products';
+import { formatPrice } from '@/lib/currency';
 import { Providers } from '@/components/providers';
 import { GlyphReady } from '@/components/glyph-ready';
 import { SiteHeader } from '@/components/site-header';
@@ -78,13 +80,25 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
   const dict = getDictionary(locale);
 
+  /*
+   * The share card quotes the cheapest piece in AED. Metadata is rendered on
+   * the server, where the visitor's currency is not yet known, so it uses the
+   * default rather than a figure that would be wrong for half the Gulf.
+   */
+  const from = formatPrice(
+    Math.min(...products.map((product) => product.priceUsd)),
+    defaultCurrency,
+    locale,
+  );
+  const description = dict.hero.body.replace('{from}', from);
+
   return {
     metadataBase: new URL(store.siteUrl),
     title: {
       default: `${dict.brand.name} — ${dict.brand.tagline}`,
       template: `%s — ${dict.brand.name}`,
     },
-    description: dict.home.heroBody,
+    description,
     alternates: {
       canonical: `/${locale}`,
       languages: { en: '/en', ar: '/ar', 'x-default': '/en' },
@@ -93,9 +107,26 @@ export async function generateMetadata({
       type: 'website',
       siteName: dict.brand.name,
       title: `${dict.brand.name} — ${dict.brand.tagline}`,
-      description: dict.home.heroBody,
+      description,
       locale: locale === 'ar' ? 'ar_AE' : 'en_AE',
       url: `/${locale}`,
+      images: [
+        {
+          // JPEG, not the WebP the product photos use: WhatsApp previews are
+          // unreliable with WebP and WhatsApp is where the orders come from.
+          url: '/og/share.jpg',
+          width: 1200,
+          height: 630,
+          alt: `${dict.brand.name} — ${dict.brand.tagline}`,
+          type: 'image/jpeg',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${dict.brand.name} — ${dict.brand.tagline}`,
+      description,
+      images: ['/og/share.jpg'],
     },
     robots: { index: true, follow: true },
   };
