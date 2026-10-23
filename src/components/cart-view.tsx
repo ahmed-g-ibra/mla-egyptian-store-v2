@@ -3,7 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart, useCurrency } from './providers';
-import { formatPrice, convert, currencyMeta } from '@/lib/currency';
+import { formatPrice, convert } from '@/lib/currency';
+import { createOrderReference } from '@/lib/order-reference';
 import { products } from '@/data/products';
 import { whatsappLink } from '@/config/store';
 import type { Locale } from '@/i18n/config';
@@ -49,16 +50,23 @@ export function CartView({ locale, dict }: { locale: Locale; dict: Dictionary })
     0,
   );
 
-  const message = [
-    dict.cart.whatsappIntro,
-    ...entries.map(
-      (entry) =>
-        `• ${entry.name} ×${entry.quantity} — ${formatPrice(entry.product.priceUsd, currency, locale)}`,
-    ),
-    `${dict.cart.subtotal}: ${currencyMeta[currency].symbol[locale]} ${subtotal.toFixed(
-      subtotal % 1 === 0 ? 0 : currencyMeta[currency].decimals,
-    )}`,
-  ].join('\n');
+  /** Already-converted amounts go through the same formatter as the prices. */
+  const money = (amount: number) => formatPrice(amount, currency, locale, { convertFirst: false });
+
+  const buildMessage = () =>
+    [
+      dict.cart.whatsappIntro,
+      `${dict.checkout.reference}: ${createOrderReference()}`,
+      '',
+      ...entries.map(
+        (entry) =>
+          `• ${entry.name} ×${entry.quantity} — ${money(
+            convert(entry.product.priceUsd, currency) * entry.quantity,
+          )}`,
+      ),
+      '',
+      `${dict.cart.subtotal}: ${money(subtotal)}`,
+    ].join('\n');
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_20rem]">
@@ -119,19 +127,22 @@ export function CartView({ locale, dict }: { locale: Locale; dict: Dictionary })
       <aside className="h-fit rounded-sm border border-papyrus-300/70 bg-papyrus-50 p-6">
         <h2 className="font-display text-lg text-ink-900">{dict.cart.subtotal}</h2>
         <p className="mt-2 text-2xl font-semibold text-ink-900" dir="ltr">
-          {currencyMeta[currency].symbol[locale]}{' '}
-          {subtotal.toFixed(subtotal % 1 === 0 ? 0 : currencyMeta[currency].decimals)}
+          {money(subtotal)}
         </p>
         <p className="mt-3 text-xs leading-relaxed text-ink-500">{dict.cart.shippingNote}</p>
 
-        <a
-          href={whatsappLink(message)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-5 block rounded-sm bg-malachite-600 px-5 py-3 text-center font-display text-sm uppercase tracking-[0.12em] text-papyrus-50 transition-colors hover:bg-malachite-700"
+        {/*
+          A button rather than a link: every order gets a reference, and a
+          reference generated during render would differ between the server
+          and the client and change on every re-render.
+        */}
+        <button
+          type="button"
+          onClick={() => window.open(whatsappLink(buildMessage()), '_blank', 'noopener')}
+          className="mt-5 block w-full rounded-sm bg-malachite-600 px-5 py-3 text-center font-display text-sm uppercase tracking-[0.12em] text-papyrus-50 transition-colors hover:bg-malachite-700"
         >
           {dict.cart.orderOnWhatsapp}
-        </a>
+        </button>
 
         <Link
           href={`/${locale}/checkout`}

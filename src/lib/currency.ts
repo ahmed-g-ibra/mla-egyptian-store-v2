@@ -93,6 +93,19 @@ const roundRetail = (value: number, decimals: number) =>
 export const convert = (priceUsd: number, currency: Currency) =>
   roundRetail(priceUsd * MARKUP * currencyMeta[currency].rate, currencyMeta[currency].decimals);
 
+/**
+ * Shipping is quoted in dirhams in faq.ts, because that is the currency the
+ * rates were agreed in. This puts a dirham figure into whatever the visitor
+ * is seeing, without the product markup — we do not mark shipping up.
+ */
+export const convertFromAed = (aed: number, currency: Currency) => {
+  const usd = aed / currencyMeta.AED.rate;
+  const meta = currencyMeta[currency];
+  return meta.decimals === 2
+    ? Math.round(usd * meta.rate)
+    : Math.round(usd * meta.rate * 10) / 10;
+};
+
 export const formatPrice = (
   priceUsd: number,
   currency: Currency,
