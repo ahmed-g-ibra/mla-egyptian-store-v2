@@ -368,10 +368,10 @@ headline waiting on the Arabic webfont.
 `LICENSE` — proprietary, all rights reserved. Published to be read, not
 reused.
 
-Deliberately **not** open source. An MIT or Apache licence would grant anyone
-the right to run this shop, and more importantly it would be granting rights
-over the supplier photographs, which are not the owner's to give. The licence
-says so explicitly and gives those suppliers a route to ask for a takedown.
+Deliberately **not** open source. A permissive licence would grant anyone the
+right to run this shop, and re-theming it or swapping the catalogue would not
+change that — so the notice rules out derivative works explicitly, not just
+verbatim copying.
 
 ---
 

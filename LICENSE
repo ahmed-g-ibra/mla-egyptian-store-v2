@@ -1,41 +1,51 @@
-Copyright (c) 2026 Ahmed Gamal (MLA), Muscat, Oman. All rights reserved.
+PROPRIETARY SOFTWARE LICENCE
 
-This repository is published so the work can be read. It is not open source
-and no permission to reuse it is granted.
+Copyright (c) 2026 MLA. All rights reserved.
 
-WHAT YOU MAY DO
+This repository and everything in it — the source code, the design, the
+written content in both languages, the brand marks and the product data — is
+the exclusive property of the copyright holder.
 
-  Read the source, and quote short excerpts with attribution — in a review, an
-  article, a lesson, or a conversation about how something here was built.
+It is published so that the work can be read. Publishing it grants no rights
+of any kind. No licence, express or implied, is given to any person to use it.
 
-WHAT YOU MAY NOT DO, WITHOUT WRITTEN PERMISSION
+NOT PERMITTED
 
-  Copy, publish, host, sell or redistribute this repository or any substantial
-  part of it, or make derivative works from it. That includes running it as a
-  shop, whether or not you change the branding.
+Without the prior written permission of the copyright holder, you may not:
+
+  1. copy, reproduce or store this repository or any substantial part of it,
+     other than the incidental copy your browser makes while reading it;
+
+  2. run, host, deploy or operate it, in whole or in part, publicly or
+     privately, for commercial purposes or otherwise;
+
+  3. publish, distribute, sublicense, rent, lease, lend or sell it;
+
+  4. create derivative works from it, including by re-theming it, translating
+     it, replacing the branding, or substituting the product catalogue — a
+     copy of this shop with a different name on it is still a copy;
+
+  5. extract the written content, the product descriptions in either language,
+     the brand marks, or the design system for use in another product;
+
+  6. remove, obscure or alter this notice.
+
+PERMITTED
+
+  Reading the source. Quoting short excerpts with attribution for review,
+  comment, teaching or private study, as permitted by applicable law.
 
 THIRD-PARTY MATERIAL
 
-  This is the important part, and it binds the owner too.
-
-  The product photographs under public/products/ and public/og/ were taken by
-  the suppliers whose catalogues they came from — supplier-a,
-  supplier-b and supplier-c. They are reproduced here under no licence
-  that has been granted in writing. They are NOT covered by this notice, and
-  nothing here grants anyone any right to them.
-
-  If you are one of those suppliers and want a photograph removed, contact
-  REDACTED and it will be taken down.
-
-  The MLA mark in brand/ and the Egyptian hieroglyphs it contains are the
-  owner's. The typefaces are Cinzel, EB Garamond, Noto Kufi Arabic and Noto
-  Sans Egyptian Hieroglyphs, each used under the SIL Open Font License, which
-  travels with the fonts and not with this notice.
+  Some assets in this repository are the property of third parties and are not
+  covered by this notice. Nothing here grants any right to them. Typefaces are
+  used under their own licences, which travel with the fonts.
 
 NO WARRANTY
 
-  Provided as is, with no warranty of any kind. The author is not liable for
-  any claim or damage arising from it.
+  Provided "as is", without warranty of any kind, express or implied. The
+  copyright holder is not liable for any claim, damage or other liability
+  arising from this repository or its use.
 
-This notice was not drafted by a lawyer. If anything here matters
-commercially, have it reviewed.
+This notice was not drafted by a lawyer. If it needs to hold up, have one
+read it.
