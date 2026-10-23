@@ -7,8 +7,9 @@ export type FaqEntry = { question: Localised; answer: Localised };
  * copied from a template — but not legal advice and not reviewed by a lawyer.
  * Have them checked against Omani and UAE consumer law before launch.
  *
- * Shipping figures are the ones agreed at build time. They live here and
- * nowhere else; change them here and every page follows.
+ * Shipping figures confirmed by the owner on 23 Oct 2026. They live here and
+ * nowhere else; change them here and the FAQ prose below must be edited to
+ * match, in both languages.
  */
 export const shipping = {
   freeOverAed: 400,

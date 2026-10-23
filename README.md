@@ -170,9 +170,9 @@ export const shipping = {
 };
 ```
 
-⚠️ **These were set from a build-time assumption and have not been confirmed
-against real courier quotes.** Confirm them before launch; the FAQ prose in the
-same file quotes them in both languages and must be edited to match.
+Confirmed by the owner on 23 October 2026. The FAQ prose in the same file
+quotes these numbers in both languages, so if you change a figure here, edit
+the English and Arabic answers to match — they are not interpolated.
 
 ## Honest description
 
@@ -223,7 +223,6 @@ good.
 ## Known gaps
 
 - `heightCm` / `material` are null on 28 of 30 products (see above).
-- Shipping figures are unconfirmed.
 - Policies are not legally reviewed.
 - Product photography comes from the suppliers' own listings.
 - `npm audit` reports advisories in the ESLint toolchain only — dev
