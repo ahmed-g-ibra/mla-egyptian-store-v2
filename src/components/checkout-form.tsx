@@ -21,24 +21,48 @@ const COUNTRY_NAMES: Record<(typeof GCC)[number], { en: string; ar: string }> = 
 };
 
 export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionary }) {
-  const { ready, clear } = useCart();
+  const { ready } = useCart();
   const { currency } = useCurrency();
   const entries = useCartLines(locale);
   const [placed, setPlaced] = useState(false);
 
   if (!ready) return <GlyphLoader label={dict.common.loading} />;
 
+  const orderMessage = [
+    dict.cart.whatsappIntro,
+    ...entries.map((entry) => `• ${entry.name} ×${entry.quantity}`),
+  ].join('\n');
+
   if (placed) {
     return (
       <div className="mx-auto max-w-xl py-16 text-center">
         <h2 className="font-display text-2xl text-ink-900">{dict.checkout.placed}</h2>
         <p className="mt-4 leading-relaxed text-ink-700">{dict.checkout.placedBody}</p>
-        <Link
-          href={`/${locale}/shop`}
-          className="mt-8 inline-block rounded-sm bg-ink-900 px-6 py-3 font-display text-sm uppercase tracking-[0.15em] text-papyrus-100 transition-colors hover:bg-lapis-800"
-        >
-          {dict.checkout.backToShop}
-        </Link>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          {entries.length > 0 ? (
+            <a
+              href={whatsappLink(orderMessage)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center rounded-sm bg-malachite-600 px-6 py-3 font-display text-sm uppercase tracking-[0.12em] text-papyrus-50 transition-colors hover:bg-malachite-700"
+            >
+              {dict.cart.orderOnWhatsapp}
+            </a>
+          ) : null}
+          <Link
+            href={`/${locale}/shop`}
+            className="inline-flex min-h-11 items-center rounded-sm border border-ink-900 px-6 py-3 font-display text-sm uppercase tracking-[0.15em] text-ink-900 transition-colors hover:bg-ink-900 hover:text-papyrus-100"
+          >
+            {dict.checkout.backToShop}
+          </Link>
+        </div>
+
+        {entries.length > 0 ? (
+          <p className="mt-6 text-sm text-ink-500">
+            {dict.cart.title}: {entries.map((e) => `${e.name} ×${e.quantity}`).join(' · ')}
+          </p>
+        ) : null}
       </div>
     );
   }
@@ -62,11 +86,6 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
     0,
   );
 
-  const message = [
-    dict.cart.whatsappIntro,
-    ...entries.map((entry) => `• ${entry.name} ×${entry.quantity}`),
-  ].join('\n');
-
   const field =
     'w-full rounded-sm border border-papyrus-300 bg-papyrus-50 px-3 py-2.5 text-ink-900 transition-colors focus-visible:border-gold-500';
   const label = 'block text-xs font-medium uppercase tracking-wide text-ink-500';
@@ -76,7 +95,9 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          clear();
+          // The cart is deliberately NOT cleared. This checkout takes no
+          // money, so emptying the basket would leave a ready buyer with
+          // nothing to send and no way to reach us.
           setPlaced(true);
         }}
         className="space-y-8"
@@ -143,7 +164,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
           </button>
           <span className="text-sm text-ink-500">{dict.checkout.orSplit}</span>
           <a
-            href={whatsappLink(message)}
+            href={whatsappLink(orderMessage)}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-sm bg-malachite-600 px-6 py-3.5 font-display text-sm uppercase tracking-[0.12em] text-papyrus-50 transition-colors hover:bg-malachite-700"
