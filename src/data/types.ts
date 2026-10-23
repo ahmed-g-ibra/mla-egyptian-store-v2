@@ -20,12 +20,6 @@ export type Product = {
   /** One line for cards and meta descriptions. */
   tagline: Localised;
   description: Localised;
-  /**
-   * Null where the source listing did not state it. The storefront shows
-   * "on request" rather than inventing a figure — see README.
-   */
-  heightCm: number | null;
-  material: Localised | null;
   /** As listed by the supplier, before MLA's markup. Never shown directly. */
   priceUsd: number;
   /** Supplier's own "was" price, where one was listed and is a real discount. */

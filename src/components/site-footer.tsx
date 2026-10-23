@@ -12,6 +12,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
   ];
   const help = [
     { href: `/${locale}/faq`, label: dict.nav.faq },
+    { href: `/${locale}/size-guide`, label: dict.specs.sizeGuide },
     { href: `/${locale}/contact`, label: dict.nav.contact },
   ];
 

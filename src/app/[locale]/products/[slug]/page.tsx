@@ -5,11 +5,13 @@ import { isLocale, locales, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { products } from '@/data/products';
 import { collectionById } from '@/data/collections';
+import { specsFor } from '@/data/specs';
 import { store } from '@/config/store';
 import { ProductGallery } from '@/components/product-gallery';
 import { AddToCart } from '@/components/add-to-cart';
 import { ProductCard } from '@/components/product-card';
 import { Price, ComparePrice } from '@/components/price';
+import { SpecTable } from '@/components/specs';
 import { whatsappLink } from '@/config/store';
 
 export const generateStaticParams = () =>
@@ -53,6 +55,7 @@ export default async function ProductPage({
   const typed = locale as Locale;
   const dict = getDictionary(typed);
   const collection = collectionById(product.collection);
+  const specs = specsFor(product.slug);
   const related = products
     .filter((p) => p.collection === product.collection && p.slug !== product.slug)
     .slice(0, 4);
@@ -66,6 +69,19 @@ export default async function ProductPage({
     description: product.description[typed],
     image: product.images.map((src) => `${store.siteUrl}${src}`),
     brand: { '@type': 'Brand', name: 'MLA' },
+    ...(specs.weightKg !== undefined
+      ? { weight: { '@type': 'QuantitativeValue', value: specs.weightKg, unitCode: 'KGM' } }
+      : {}),
+    ...(specs.heightCm !== undefined
+      ? { height: { '@type': 'QuantitativeValue', value: specs.heightCm, unitCode: 'CMT' } }
+      : {}),
+    ...(specs.widthCm !== undefined
+      ? { width: { '@type': 'QuantitativeValue', value: specs.widthCm, unitCode: 'CMT' } }
+      : {}),
+    ...(specs.depthCm !== undefined
+      ? { depth: { '@type': 'QuantitativeValue', value: specs.depthCm, unitCode: 'CMT' } }
+      : {}),
+    ...(specs.material ? { material: specs.material[typed] } : {}),
     offers: {
       '@type': 'Offer',
       priceCurrency: 'USD',
@@ -139,34 +155,13 @@ export default async function ProductPage({
             <p className="mt-3 leading-relaxed text-ink-700">{product.description[typed]}</p>
           </section>
 
-          <dl className="mt-8 grid grid-cols-2 gap-4 border-t border-papyrus-300/70 pt-6 text-sm">
-            <div>
-              <dt className="text-xs uppercase tracking-widest text-ink-500">
-                {dict.product.collection}
-              </dt>
-              <dd className="mt-1 text-ink-900">{collection?.name[typed]}</dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-widest text-ink-500">
-                {dict.product.height}
-              </dt>
-              <dd className="mt-1 text-ink-900">
-                {product.heightCm ? (
-                  <span dir="ltr">{product.heightCm} cm</span>
-                ) : (
-                  dict.product.onRequest
-                )}
-              </dd>
-            </div>
-            {product.material ? (
-              <div>
-                <dt className="text-xs uppercase tracking-widest text-ink-500">
-                  {dict.product.material}
-                </dt>
-                <dd className="mt-1 text-ink-900">{product.material[typed]}</dd>
-              </div>
-            ) : null}
-          </dl>
+          <SpecTable
+            specs={specs}
+            locale={typed}
+            dict={dict}
+            collectionName={collection?.name[typed]}
+            askHref={whatsappLink(`${dict.contact.whatsappIntro} ${product.name[typed]}`)}
+          />
 
           <p className="mt-6 rounded-sm border border-papyrus-300/70 bg-papyrus-50 px-4 py-3 text-xs leading-relaxed text-ink-500">
             {dict.product.reproductionNotice}

@@ -59,6 +59,18 @@ export const en = {
     gallery: 'Product images',
     viewImage: 'View image',
   },
+  specs: {
+    title: 'Dimensions',
+    width: 'Width',
+    depth: 'Depth',
+    weight: 'Weight',
+    thisPiece: 'this piece',
+    reference: 'A4 sheet',
+    sizeGuide: 'Size guide',
+    notMeasured:
+      'We have not measured this one yet, and we would rather say so than print a figure we are guessing at.',
+    askForIt: 'Ask and we will measure it',
+  },
   cart: {
     title: 'Your cart',
     empty: 'Your cart is empty.',
@@ -108,6 +120,22 @@ export const en = {
     whatsappIntro: 'Hello MLA, I have a question:',
   },
   faq: { title: 'Shipping & FAQ', lead: 'How delivery to the Gulf works, and what to expect.' },
+  sizeGuide: {
+    title: 'Size Guide',
+    lead: 'How we measure, and what the numbers mean when the piece is in your hands.',
+    howTitle: 'How we measure',
+    howBody:
+      'Height runs from the bottom of the base to the highest point, because that is what occupies a shelf. Width is the widest point left to right, and depth the deepest front to back — on a seated figure that is usually the base, not the body.',
+    unitsTitle: 'Centimetres and inches',
+    unitsBody:
+      'Every measurement is given in centimetres with inches alongside. Our suppliers work in inches and the Gulf works in centimetres, so both are printed rather than asking anyone to convert.',
+    missingTitle: 'Where a measurement is missing',
+    missingBody:
+      'The supplier listings carried no dimensions, so each piece is measured by hand as it passes through us. Where a page says a piece has not been measured, that is literal — ask and we will put a tape to it before you commit.',
+    commonTitle: 'A rough sense of scale',
+    commonBody:
+      'Most of the collection sits between a coffee cup and an A4 sheet. The scale drawing on each product page compares that piece against a sheet of A4 stood on its long edge.',
+  },
   footer: {
     rights: 'All rights reserved.',
     reproductions: 'All pieces are contemporary reproductions made in Egypt.',

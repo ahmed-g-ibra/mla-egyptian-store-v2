@@ -5,7 +5,7 @@ import { products } from '@/data/products';
 import { collections } from '@/data/collections';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = ['', '/shop', '/collections', '/story', '/faq', '/contact'];
+  const staticPaths = ['', '/shop', '/collections', '/story', '/faq', '/size-guide', '/contact'];
 
   const entries: MetadataRoute.Sitemap = [];
 

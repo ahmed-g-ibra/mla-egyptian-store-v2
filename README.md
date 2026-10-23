@@ -24,6 +24,7 @@ npm run lint
 |---|---|
 | `src/config/store.ts` | **Edit this first.** WhatsApp number, email, city, copyright year, site URL. |
 | `src/data/products.ts` | The 30 products: EN/AR names, taglines, descriptions, prices, images. |
+| `src/data/specs.ts` | **Measurements.** One line per product — fill these in as you measure. |
 | `src/data/collections.ts` | The six collections and their hieroglyph. |
 | `src/data/faq.ts` | Shipping figures + the FAQ, EN/AR. |
 | `src/data/story.ts` | The story page, EN/AR. |
@@ -47,8 +48,6 @@ string is a build error rather than a blank space on the site.
   name: { en: 'Bastet, Seated', ar: 'باستت جالسة' },
   tagline: { en: '…', ar: '…' },   // one line, used on cards and in meta tags
   description: { en: '…', ar: '…' },
-  heightCm: null,                   // null renders "On request — ask us"
-  material: null,
   priceUsd: 26.5,                   // supplier's price, before markup
   compareAtUsd: null,               // a real "was" price, or null
   featured: true,                   // shows on the home page
@@ -56,10 +55,7 @@ string is a build error rather than a blank space on the site.
 }
 ```
 
-**`heightCm` and `material` are `null` on most products, deliberately.** The
-supplier feeds carried no dimensions and no materials, and inventing them would
-put a false spec on a product page. Fill them in as you confirm them with the
-supplier; until then the page says "on request".
+Measurements are **not** in this file — see below.
 
 ### Adding a product
 
@@ -67,6 +63,54 @@ supplier; until then the page says "on request".
 2. `node scripts/fetch-images.mjs` — downloads, converts to WebP, skips what
    already exists, and writes `scripts/failed-images.json` if anything 404s.
 3. Add the matching entry to `src/data/products.ts`.
+
+---
+
+## Filling in measurements
+
+All physical facts live in `src/data/specs.ts`, one line per slug, and that is
+the only file you need to touch:
+
+```ts
+export const specs: Record<string, Specs> = {
+  'sphinx-box': { heightCm: 11 },
+  'nefertiti-bust': {},            // not measured yet
+  'canopic-jar-set-four': {
+    heightCm: 24,
+    widthCm: 9,
+    depthCm: 9,
+    weightKg: 1.8,
+    material: { en: 'Painted resin', ar: 'راتنج مطليّ' },
+  },
+};
+```
+
+Every field is optional. Add what you have and leave out what you do not —
+a product with only a height shows only a height.
+
+**An empty `{}` is not a gap in the code, it is a statement.** The page says
+the piece has not been measured and offers to measure it on WhatsApp, which is
+the honest answer and a better one than a number nobody checked. Two entries
+are pre-filled because their source listings stated a size (`taweret-hippo-statue`
+at 6 cm, `sphinx-box` at 11 cm); the other 28 are waiting on you.
+
+### Why this is a separate file
+
+`products.ts` is generated from the supplier feeds and gets regenerated when
+the catalogue is re-scraped. Measurements are taken by hand and must survive
+that, so they live apart and are merged at render time.
+
+### What the buyer sees
+
+- a dimensions table, each figure in **cm with inches alongside** — suppliers
+  work in inches, the Gulf works in centimetres, so both are printed;
+- a **scale drawing** comparing the piece's height against a sheet of A4 stood
+  on its long edge, which appears as soon as a `heightCm` exists;
+- measurements fed into the page's structured data, so search results can show
+  them.
+
+A `/size-guide` page explains how each measurement is taken. Heights include
+the base, because that is what occupies a shelf.
 
 ---
 
@@ -222,7 +266,7 @@ good.
 
 ## Known gaps
 
-- `heightCm` / `material` are null on 28 of 30 products (see above).
+- 28 of 30 products are unmeasured — `src/data/specs.ts` is waiting on them.
 - Policies are not legally reviewed.
 - Product photography comes from the suppliers' own listings.
 - `npm audit` reports advisories in the ESLint toolchain only — dev
