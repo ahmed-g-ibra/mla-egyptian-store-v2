@@ -1,0 +1,191 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { isLocale, locales, type Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/get-dictionary';
+import { products } from '@/data/products';
+import { collectionById } from '@/data/collections';
+import { store } from '@/config/store';
+import { ProductGallery } from '@/components/product-gallery';
+import { AddToCart } from '@/components/add-to-cart';
+import { ProductCard } from '@/components/product-card';
+import { Price, ComparePrice } from '@/components/price';
+import { whatsappLink } from '@/config/store';
+
+export const generateStaticParams = () =>
+  locales.flatMap((locale) => products.map((p) => ({ locale, slug: p.slug })));
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  if (!isLocale(locale)) return {};
+  const product = products.find((p) => p.slug === slug);
+  if (!product) return {};
+
+  return {
+    title: product.name[locale],
+    description: product.tagline[locale],
+    alternates: {
+      canonical: `/${locale}/products/${slug}`,
+      languages: { en: `/en/products/${slug}`, ar: `/ar/products/${slug}` },
+    },
+    openGraph: {
+      title: product.name[locale],
+      description: product.tagline[locale],
+      images: [{ url: product.images[0], width: 1200, height: 1200, alt: product.name[locale] }],
+    },
+  };
+}
+
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}) {
+  const { locale, slug } = await params;
+  if (!isLocale(locale)) notFound();
+  const product = products.find((p) => p.slug === slug);
+  if (!product) notFound();
+
+  const typed = locale as Locale;
+  const dict = getDictionary(typed);
+  const collection = collectionById(product.collection);
+  const related = products
+    .filter((p) => p.collection === product.collection && p.slug !== product.slug)
+    .slice(0, 4);
+
+  // Priced in USD for the feed: a structured-data price has to be a fixed
+  // figure, and the visitor's currency is a client-side choice.
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name[typed],
+    description: product.description[typed],
+    image: product.images.map((src) => `${store.siteUrl}${src}`),
+    brand: { '@type': 'Brand', name: 'MLA' },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'USD',
+      price: (product.priceUsd * 1.15).toFixed(2),
+      availability: 'https://schema.org/InStock',
+      url: `${store.siteUrl}/${typed}/products/${product.slug}`,
+    },
+  };
+
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <nav aria-label="Breadcrumb" className="mb-6 text-xs text-ink-500">
+        <Link href={`/${typed}/shop`} className="underline-offset-4 hover:underline">
+          {dict.shop.title}
+        </Link>
+        {collection ? (
+          <>
+            <span className="mx-2">/</span>
+            <Link
+              href={`/${typed}/collections/${collection.id}`}
+              className="underline-offset-4 hover:underline"
+            >
+              {collection.name[typed]}
+            </Link>
+          </>
+        ) : null}
+      </nav>
+
+      <div className="grid gap-10 lg:grid-cols-2">
+        <ProductGallery images={product.images} alt={product.name[typed]} dict={dict} />
+
+        <div>
+          <h1 className="font-display text-3xl text-ink-900 sm:text-4xl">{product.name[typed]}</h1>
+          <p className="mt-2 text-lg text-ink-500">{product.tagline[typed]}</p>
+
+          <p className="mt-6 flex items-baseline gap-3">
+            <Price
+              priceUsd={product.priceUsd}
+              locale={typed}
+              className="font-display text-3xl text-ink-900"
+            />
+            {product.compareAtUsd ? (
+              <ComparePrice
+                priceUsd={product.compareAtUsd}
+                locale={typed}
+                className="text-base text-ink-500"
+              />
+            ) : null}
+          </p>
+
+          <div className="mt-8">
+            <AddToCart slug={product.slug} dict={dict} />
+          </div>
+
+          <a
+            href={whatsappLink(`${dict.contact.whatsappIntro} ${product.name[typed]}`)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-block text-sm text-malachite-700 underline underline-offset-4"
+          >
+            {dict.product.askAbout}
+          </a>
+
+          <section className="mt-10 border-t border-papyrus-300/70 pt-8">
+            <h2 className="font-display text-lg text-ink-900">{dict.product.aboutTitle}</h2>
+            <p className="mt-3 leading-relaxed text-ink-700">{product.description[typed]}</p>
+          </section>
+
+          <dl className="mt-8 grid grid-cols-2 gap-4 border-t border-papyrus-300/70 pt-6 text-sm">
+            <div>
+              <dt className="text-xs uppercase tracking-widest text-ink-500">
+                {dict.product.collection}
+              </dt>
+              <dd className="mt-1 text-ink-900">{collection?.name[typed]}</dd>
+            </div>
+            <div>
+              <dt className="text-xs uppercase tracking-widest text-ink-500">
+                {dict.product.height}
+              </dt>
+              <dd className="mt-1 text-ink-900">
+                {product.heightCm ? (
+                  <span dir="ltr">{product.heightCm} cm</span>
+                ) : (
+                  dict.product.onRequest
+                )}
+              </dd>
+            </div>
+            {product.material ? (
+              <div>
+                <dt className="text-xs uppercase tracking-widest text-ink-500">
+                  {dict.product.material}
+                </dt>
+                <dd className="mt-1 text-ink-900">{product.material[typed]}</dd>
+              </div>
+            ) : null}
+          </dl>
+
+          <p className="mt-6 rounded-sm border border-papyrus-300/70 bg-papyrus-50 px-4 py-3 text-xs leading-relaxed text-ink-500">
+            {dict.product.reproductionNotice}
+          </p>
+        </div>
+      </div>
+
+      {related.length > 0 ? (
+        <section className="mt-20">
+          <h2 className="mb-8 font-display text-2xl text-ink-900">{dict.product.relatedTitle}</h2>
+          <ul className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
+            {related.map((item) => (
+              <li key={item.slug}>
+                <ProductCard product={item} locale={typed} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+    </div>
+  );
+}

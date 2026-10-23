@@ -1,0 +1,161 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Papyrus and sandstone — the page ground. */
+  --color-papyrus-50: #fbf8f1;
+  --color-papyrus-100: #f5eedf;
+  --color-papyrus-200: #eae0cb;
+  --color-papyrus-300: #d8c9a9;
+  --color-papyrus-400: #bfab85;
+
+  /* Deep black, warmed so it sits with the sand rather than against it. */
+  --color-ink-900: #14110c;
+  --color-ink-800: #221c14;
+  --color-ink-700: #342b1f;
+  --color-ink-600: #4b3f2e;
+  --color-ink-500: #6b5b44;
+
+  /* Lapis lazuli. */
+  --color-lapis-900: #0c2342;
+  --color-lapis-800: #112c52;
+  --color-lapis-700: #16365f;
+  --color-lapis-600: #1b4274;
+  --color-lapis-200: #b7cae4;
+
+  /* Gold. 600 is the darkest and the only one safe for small text on sand. */
+  --color-gold-600: #8a6d14;
+  --color-gold-500: #b08f22;
+  --color-gold-400: #d0ae3f;
+  --color-gold-300: #e0c877;
+  --color-gold-200: #efdfae;
+
+  /* WhatsApp actions — green reads as 'message', not as a brand accent. */
+  --color-malachite-700: #1f4f3f;
+  --color-malachite-600: #2b6a54;
+
+  --color-carnelian-700: #7d2b1a;
+  --color-carnelian-600: #9c3822;
+
+  --font-display: var(--font-cinzel, Georgia), Georgia, serif;
+  --font-body: var(--font-garamond, Georgia), Georgia, serif;
+  --font-display-ar: var(--font-kufi, system-ui), system-ui, sans-serif;
+  --font-body-ar: var(--font-kufi, system-ui), system-ui, sans-serif;
+  --font-glyph: var(--font-hieroglyph), serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-papyrus-100);
+    color: var(--color-ink-900);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /*
+   * Arabic swaps the font variables themselves rather than overriding the
+   * headings. A `font-display` utility sits in a later cascade layer than any
+   * base rule, so overriding by selector loses; redefining the variable wins
+   * everywhere the variable is read, utilities included.
+   */
+  [dir='rtl'] {
+    --font-display: var(--font-display-ar);
+    --font-body: var(--font-body-ar);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+  }
+
+  [dir='rtl'] h1,
+  [dir='rtl'] h2,
+  [dir='rtl'] h3,
+  [dir='rtl'] h4 {
+    /* Cinzel's wide tracking does not suit Arabic letterforms. */
+    letter-spacing: 0;
+  }
+
+  /* Visible keyboard focus everywhere, on both grounds. */
+  :focus-visible {
+    outline: 2px solid var(--color-lapis-600);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .on-ink :focus-visible {
+    outline-color: var(--color-gold-300);
+  }
+}
+
+@utility papyrus-grain {
+  /* Two low-opacity gradients standing in for a paper texture: no image
+     request, no layout cost, and it survives a dark background. */
+  background-image:
+    radial-gradient(circle at 20% 15%, rgb(0 0 0 / 0.025) 0, transparent 45%),
+    radial-gradient(circle at 80% 70%, rgb(0 0 0 / 0.02) 0, transparent 40%);
+}
+
+/*
+ * Hieroglyph ornament.
+ *
+ * The sign itself is `display: none` until the face has loaded, because a
+ * merely-hidden element still counts as using the family and the browser
+ * fetches all 260 KB of it immediately — which is exactly what we are trying
+ * to avoid. The slot around it reserves the space in em, so revealing the
+ * sign later shifts nothing and CLS stays at zero.
+ */
+@utility glyph-slot {
+  display: inline-block;
+  min-width: 1em;
+  height: 1em;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+@utility glyph-font {
+  font-family: var(--font-glyph);
+  display: none;
+  line-height: 1;
+}
+
+.glyphs-ready .glyph-font {
+  display: inline;
+}
+
+/* The hieroglyph loading animation: each sign fades up in turn. */
+@keyframes glyph-pulse {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+@utility animate-glyph-pulse {
+  animation: glyph-pulse 1.4s ease-in-out infinite;
+}
