@@ -27,6 +27,7 @@ npm run lint
 | `src/data/specs.ts` | **Measurements.** One line per product — fill these in as you measure. |
 | `src/data/collections.ts` | The six collections and their hieroglyph. |
 | `src/data/faq.ts` | Shipping figures + the FAQ, EN/AR. |
+| `src/data/validate.ts` | Build-time pricing checks. Breaks the build on a bad discount. |
 | `src/data/story.ts` | The story page, EN/AR. |
 | `src/lib/currency.ts` | The six GCC currencies, their rates, decimals and the markup. |
 | `src/i18n/dictionaries/` | Every other string, `en.ts` and `ar.ts`. |
@@ -128,6 +129,29 @@ displayed price = priceUsd × MARKUP × rate[currency], rounded
 
 Keeping the supplier's figure as the stored value means a re-scrape updates
 cleanly and the margin stays one number in one place.
+
+### Putting something on sale
+
+Set `compareAtUsd` to the **old, higher** price and lower `priceUsd` to the new
+one. 25% off a $29 piece:
+
+```ts
+priceUsd: 21.75,
+compareAtUsd: 29,
+```
+
+That one field switches on a `SALE` / `خصم` badge on the card, the old price
+struck through on both the card and the product page, and both figures
+converted to the visitor's currency. You never type a percentage — the
+discount is the gap between the two numbers. Set `compareAtUsd` back to `null`
+to end the sale.
+
+**The build refuses a nonsensical sale.** `src/data/validate.ts` runs when
+`products.ts` loads, so `next build` and `next dev` both fail if any
+`compareAtUsd` is less than or equal to its `priceUsd` — a "sale" at the same
+or a higher price. The error names the product and prints both numbers. This
+is a real mistake and not a hypothetical: the Khafre statue arrived from the
+supplier feed with both fields at $160.
 
 ### Why the rates are a static file and not an API
 

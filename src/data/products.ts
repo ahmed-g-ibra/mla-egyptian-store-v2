@@ -1,4 +1,5 @@
 import type { Product } from './types';
+import { assertCatalogueIsSane } from './validate';
 
 /**
  * Curated from a 23 Oct 2026 scrape of three suppliers' public Shopify feeds
@@ -441,3 +442,6 @@ export const products: Product[] = [
     images: ['1', '2', '3', '4', '5'].map((n) => `/products/nefertiti-bust/${n}.webp`),
   },
 ];
+
+// Fails the build rather than publishing a nonsensical discount.
+assertCatalogueIsSane(products);
