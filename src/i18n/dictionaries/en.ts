@@ -175,6 +175,35 @@ export const en = {
     invalidBody:
       'The link looks incomplete. Open the one we sent you on WhatsApp, or message us with your reference and we will pull it up.',
     viewPiece: 'View this piece',
+    myOrders: 'My orders',
+    status: 'Status',
+    statusPending: 'Not recorded — message us and we will confirm it',
+    tracking: 'Tracking number',
+    lastUpdated: 'Last updated',
+    /** Said to the customer, so these are sentences rather than labels. */
+    statuses: {
+      new: 'We have your order',
+      confirmed: 'Confirmed with you',
+      paid: 'Payment received',
+      shipped: 'On its way to you',
+      delivered: 'Delivered',
+      cancelled: 'Cancelled',
+    },
+  },
+  orders: {
+    title: 'My orders',
+    lead: 'What you have ordered from this browser, and where each one has got to.',
+    deviceNote:
+      'This list is kept on this device only — it does not follow you to another phone. Use the reference to find an order you placed elsewhere.',
+    empty: 'No orders from this browser yet.',
+    emptyCta: 'Browse the shop',
+    lookupTitle: 'Find an order by reference',
+    lookupLead: 'The reference is in the message we sent you, and looks like MLA-261024-AB3K.',
+    lookupLabel: 'Reference',
+    lookupCta: 'Find it',
+    lookupMissing: 'We have no order with that reference.',
+    view: 'Open this order',
+    refresh: 'Checking the latest…',
   },
   footer: {
     rights: 'All rights reserved.',

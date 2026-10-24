@@ -7,6 +7,7 @@ import { useCartLines } from './cart-view';
 import { convert, convertFromAed, formatPrice } from '@/lib/currency';
 import { createOrderReference } from '@/lib/order-reference';
 import { encodeOrder } from '@/lib/order-link';
+import { rememberOrder } from '@/lib/order-history';
 import { shipping as shippingRules } from '@/data/faq';
 import { store, whatsappLink } from '@/config/store';
 import type { Locale } from '@/i18n/config';
@@ -174,6 +175,12 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
           >
             {dict.checkout.viewOrder}
           </Link>
+          <Link
+            href={`/${locale}/orders`}
+            className="mt-3 inline-flex min-h-11 items-center px-5 py-3 font-display text-sm uppercase tracking-[0.12em] text-ink-700 underline underline-offset-4 transition-colors hover:text-gold-600 ms-0 sm:ms-3"
+          >
+            {dict.order.myOrders}
+          </Link>
 
           <p className="mt-10 text-sm text-ink-500">{dict.checkout.reopenHint}</p>
           <div className="mt-3 flex flex-wrap gap-3">
@@ -260,6 +267,42 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
           const data = new FormData(event.currentTarget);
           const country = (data.get('country') as Country) ?? 'AE';
           const reference = createOrderReference();
+          const search = encodeOrder({
+            reference,
+            lines: entries.map((entry) => ({ slug: entry.slug, quantity: entry.quantity })),
+            currency,
+            country,
+          });
+
+          /*
+           * Recorded and remembered before WhatsApp opens, because this tab is
+           * about to lose focus. `keepalive` lets the request outlive that, and
+           * a failure is swallowed on purpose: the customer is already on their
+           * way to the chat, and bookkeeping must never cost a sale.
+           *
+           * Only slugs and quantities are sent for the money. Every price is
+           * recomputed from the catalogue on the server.
+           */
+          void fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            keepalive: true,
+            body: JSON.stringify({
+              reference,
+              locale,
+              currency,
+              country,
+              customer: {
+                name: data.get('name'),
+                email: data.get('email'),
+                phone: data.get('phone'),
+                address: data.get('address'),
+                city: data.get('city'),
+              },
+              lines: entries.map((entry) => ({ slug: entry.slug, qty: entry.quantity })),
+            }),
+          }).catch(() => {});
+          rememberOrder({ reference, search, placedAt: new Date().toISOString() });
 
           /*
            * Opened from inside the submit handler so the browser treats it as

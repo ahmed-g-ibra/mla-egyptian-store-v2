@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Orders recorded by `npm run dev` without a database. Never committed.
+/.orders
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

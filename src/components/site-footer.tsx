@@ -14,6 +14,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
     { href: `/${locale}/faq`, label: dict.nav.faq },
     { href: `/${locale}/size-guide`, label: dict.specs.sizeGuide },
     { href: `/${locale}/contact`, label: dict.nav.contact },
+    { href: `/${locale}/orders`, label: dict.order.myOrders },
   ];
 
   return (

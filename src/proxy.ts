@@ -58,6 +58,6 @@ export const config = {
     // has to be matched at any depth: an earlier version only caught files at
     // the root, so /icon.png was fine but /og/share.jpg was still redirected
     // to /en/og/share.jpg and 404ed.
-    '/((?!api|_next/static|_next/image|products|sitemap.xml|robots.txt|.*\\.[^/]*$).*)',
+    '/((?!api|admin|_next/static|_next/image|products|sitemap.xml|robots.txt|.*\\.[^/]*$).*)',
   ],
 };

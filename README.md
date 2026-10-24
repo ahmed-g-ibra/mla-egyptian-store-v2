@@ -2,7 +2,8 @@
 
 A bilingual (English / Arabic) storefront selling contemporary Egyptian
 reproductions into the six GCC markets. Next.js App Router, TypeScript,
-Tailwind 4. No database — the catalogue is typed data in the repo.
+Tailwind 4. The catalogue is typed data in the repo; the only database is
+the one orders are recorded in — see [ORDERS.md](ORDERS.md).
 
 **Live: https://mla-egyptian-store-v2.vercel.app**
 
@@ -20,6 +21,7 @@ See *Honest description* before changing any product text.
 | **Put something on sale** | `src/data/products.ts` → `compareAtUsd` | [Prices](#prices-and-discounts) |
 | **Change the margin on everything** | `src/lib/currency.ts` → `MARKUP` | [Prices](#prices-and-discounts) |
 | **Change the WhatsApp number or email** | `src/config/store.ts` | [Orders](#orders) |
+| **See and update the orders placed** | nothing — go to `/admin` | [ORDERS.md](ORDERS.md) |
 | **Add a product's measurements** | `src/data/specs.ts` | [Measurements](#measurements) |
 | **Change shipping rates** | `src/data/faq.ts` → `shipping` | [Shipping](#shipping) |
 | **Change any wording** | `src/i18n/dictionaries/en.ts` + `ar.ts` | [Translations](#translations) |
@@ -171,9 +173,17 @@ There is no payment on this site. An order is captured by the checkout form
 and completed on WhatsApp.
 
 1. The customer fills the checkout form and presses **Send my order**.
-2. WhatsApp opens with the order already written, including a reference.
+2. The order is posted to `/api/orders` and recorded, and WhatsApp opens with
+   the order already written, including a reference.
 3. The confirmation page shows that reference, the totals, your contact
    details and a link to the order page.
+
+You then work through the orders at **`/admin`**: status, tracking number and
+notes, all of which the customer sees on their own order page. The whole of
+that — the database, the password, what is stored and what is deliberately not
+— is in **[ORDERS.md](ORDERS.md)**. Recording is an addition to the shop and
+never a condition of it: with no database configured, checkout behaves exactly
+as it did before.
 
 ### The reference
 

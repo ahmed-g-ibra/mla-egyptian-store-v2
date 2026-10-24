@@ -10,6 +10,7 @@ import { shipping as shippingRules } from '@/data/faq';
 import { convert, convertFromAed, formatPrice } from '@/lib/currency';
 import { decodeOrder, orderDate } from '@/lib/order-link';
 import { store, whatsappLink } from '@/config/store';
+import { OrderStatusPanel } from './order-status';
 import { Glyph } from './glyphs';
 
 const NEAR = ['OM', 'AE'];
@@ -96,6 +97,7 @@ export function OrderSummary({ locale, dict }: { locale: Locale; dict: Dictionar
             <p className="mt-2 text-ink-900">{placedLabel}</p>
           </div>
         ) : null}
+        <OrderStatusPanel reference={order.reference} locale={locale} dict={dict} />
       </div>
 
       <h2 className="mt-12 font-display text-xl text-ink-900">{dict.order.pieces}</h2>
