@@ -13,7 +13,19 @@ const MAX_AGE = 60 * 60 * 12; // half a day; this is a shop, not a bank
  */
 const secret = () => process.env.ADMIN_PASSWORD ?? '';
 
-export const adminIsConfigured = () => secret().length >= 12;
+const MINIMUM = 8;
+
+export const adminIsConfigured = () => secret().length >= MINIMUM;
+
+/**
+ * True for a password that would not survive someone trying. The page says so
+ * rather than refusing it — it is his shop and his call — but this screen
+ * holds customers' names, phones and addresses, and the URL is public.
+ */
+export const adminPasswordIsWeak = () => {
+  const value = secret();
+  return adminIsConfigured() && (value.length < 14 || /^[a-z]+\d{1,4}$/i.test(value));
+};
 
 const sign = (value: string) => createHmac('sha256', secret()).update(value).digest('hex');
 

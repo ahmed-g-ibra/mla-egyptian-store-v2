@@ -16,7 +16,7 @@ Variables**, for Production, Preview and Development:
 | Name | Where it comes from |
 | --- | --- |
 | `DATABASE_URL` | Set for you when you connect a Postgres database (below). |
-| `ADMIN_PASSWORD` | You choose it. Twelve characters minimum, or /admin stays locked. |
+| `ADMIN_PASSWORD` | You choose it. Eight characters minimum, or /admin stays locked. |
 
 Redeploy after adding them.
 
@@ -45,20 +45,33 @@ missing instead of pretending to be broken.
 
 ## Using it
 
-Each order shows the reference, when it came in, which language the customer
-was reading, their name, address, phone and email, every piece with quantities,
-and the total in the currency they were shown.
+**The dashboard** is `/admin`. Four figures across the top — what still needs
+you, what is with the courier, what has been delivered and what it came to,
+and what is confirmed but not yet paid for. Then a search box that matches a
+reference, a name, a phone number or a city, status filters with a count
+against each, and the orders themselves, newest first. Every row is a link.
 
-- **Status** — New, Confirmed, Paid, Shipped, Delivered, Cancelled. One click,
-  saved immediately. **The customer sees this** on their order page.
-- **Tracking number** — also shown to the customer once you save it.
-- **Notes** — what was agreed, when it goes out, why it was cancelled.
-- **Filter** — across the top, with a count against each status.
-- **Summary** — how many are recorded, how many still need you, and the total
-  of everything marked Delivered, in rials.
+**An order** is `/admin/<reference>`. It opens on the one thing you probably
+want: a single button that moves it to whatever normally comes next — New →
+Confirmed → Paid → Shipped → Delivered. Beside it:
 
-The phone number on each order is a WhatsApp link: tap it to open that
-customer's chat.
+- **Send the update** opens WhatsApp with a message already written *in the
+  language that customer was reading*, carrying the status, the tracking
+  number and a link to their order. Nothing is sent until you press send.
+- **Packing slip** is a clean sheet to print for the box. It names every piece
+  as a contemporary reproduction, because that is the paper a customs officer
+  reads.
+- The **tracking number**, which the customer sees on their own order page.
+- **Notes**, kept as a running list with the date on each.
+- The full set of statuses, for going back a step or cancelling.
+- The customer's address with a one-tap copy, their number as a WhatsApp link,
+  and their email.
+
+**Download all orders as CSV** is at the foot of the dashboard, for the
+bookkeeping this page is not trying to be.
+
+Cancelled orders are kept rather than deleted: a cancelled order is a fact
+about the month, not an absence.
 
 ## What the customer sees
 
@@ -84,7 +97,9 @@ customer already has, which carries the order inside it.
 - A repeated reference is ignored rather than overwritten, so a customer
   tapping checkout twice cannot wipe a status or a note.
 - Access is one shared password in an environment variable, held in a signed,
-  httpOnly cookie for twelve hours. There are no accounts and no roles.
+  httpOnly cookie for twelve hours. There are no accounts and no roles. A
+  short or obvious password is accepted but the page says so while you are
+  signed in — this screen holds customers' addresses and the URL is public.
   Changing `ADMIN_PASSWORD` signs everyone out, because it is also the key the
   session cookie is signed with.
 

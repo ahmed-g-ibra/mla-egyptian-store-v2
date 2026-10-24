@@ -22,3 +22,25 @@ export const statusTone: Record<OrderStatus, string> = {
   delivered: 'border-malachite-700 bg-malachite-700 text-papyrus-50',
   cancelled: 'border-carnelian-600 bg-carnelian-600/10 text-carnelian-700',
 };
+
+/**
+ * The step you would normally take next, which is the button the order page
+ * leads with. Delivered and cancelled are ends, so they have none.
+ */
+export const nextStatus: Record<OrderStatus, OrderStatus | null> = {
+  new: 'confirmed',
+  confirmed: 'paid',
+  paid: 'shipped',
+  shipped: 'delivered',
+  delivered: null,
+  cancelled: null,
+};
+
+/** The happy path, drawn as a line on the order page. Cancelled is not on it. */
+export const STATUS_FLOW: readonly OrderStatus[] = [
+  'new',
+  'confirmed',
+  'paid',
+  'shipped',
+  'delivered',
+];
